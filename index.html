@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Interactive Map</title>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+			}
+
+			.shield-top {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 20vh;
+				z-index: 1;
+				background-color: rgb(157, 220, 245);
+			}
+
+			.shield-left {
+				position: fixed;
+				top: 0;
+				right: 0;
+				width: calc(50vw - 60vh);
+				height: 100vh;
+				z-index: 1;
+				background-color: rgb(157, 220, 245);
+			}
+
+			.shield-right {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: calc(50vw - 60vh);
+				height: 100vh;
+				z-index: 1;
+				background-color: rgb(157, 220, 245);
+			}
+
+			.shield-bottom {
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				width: 100vw;
+				height: 20vh;
+				z-index: 1;
+				background-color: rgb(157, 220, 245);
+			}
+
+			.map-container {
+				width: 120vh;
+				height: 60vh;
+				position: fixed;
+				top: 20vh;
+				left: calc(50vw - 60vh);
+			}
+
+			.map-section {
+				width: 120vh;
+				height: 60vh;
+				overflow: hidden;
+				position: absolute;
+				transition: all 0.5s ease-in-out;
+			}
+
+			.map-inner {
+				width: 100%;
+				height: 100%;
+				position: relative;
+			}
+
+			.arrow-btn {
+				padding: 0;
+				margin: 0;
+				border: none;
+				background-color: rgba(0, 0, 0, 0);
+			}
+
+			.btn-top {
+				position: absolute;
+				padding: 0;
+				margin: 0;
+				border: none;
+				top: 3%;
+				bottom: 83%;
+				left: 50%;
+				display: flex;
+				transform: translate(-50%, 0);
+			}
+
+			.btn-left {
+				position: absolute;
+				padding: 0;
+				margin: 0;
+				border: none;
+				top: 50%;
+				right: 90%;
+				left: 3%;
+				display: flex;
+				transform: translate(0, -50%);
+			}
+
+			.btn-right {
+				position: absolute;
+				top: 50%;
+				right: 3%;
+				left: 90%;
+				display: flex;
+				transform: translate(0, -50%);
+			}
+
+			.btn-down {
+				position: absolute;
+				width: fit-content;
+				top: 83%;
+				bottom: 3%;
+				left: 50%;
+				display: flex;
+				transform: translate(-50%, 0);
+			}
+
+			.map-tl {
+				transform: translate(0, 0);
+			}
+			.map-tr {
+				transform: translate(120vh, 0);
+			}
+			.map-bl {
+				transform: translate(0, 60vh);
+			}
+			.map-br {
+				transform: translate(120vh, 60vh);
+			}
+
+			img {
+				width: 100%;
+				height: 100%;
+			}
+
+			button {
+				position: absolute;
+				top: 10px;
+				left: 10px;
+				padding: 10px;
+				font-size: 16px;
+				cursor: pointer;
+			}
+
+			.top-left {
+				top: 10px;
+				left: 10px;
+			}
+
+			.top-right {
+				top: 10px;
+				right: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="shield-top"></div>
+		<div class="shield-left"></div>
+		<div class="shield-right"></div>
+		<div class="shield-bottom"></div>
+		<div class="map-container">
+			<div class="map-section map-tl">
+				<div class="map-inner">
+					<img src="public\img\map_topLeft.png" alt="Top Left Map" />
+					<button class="arrow-btn btn-right" onclick="moveMap('tr')">
+						<img src="public\img\right-vector.png" alt="right" />
+					</button>
+					<button class="arrow-btn btn-down" onclick="moveMap('bl')">
+						<img src="public\img\down-vector.png" alt="down" />
+					</button>
+				</div>
+			</div>
+			<div class="map-section map-tr">
+				<div class="map-inner">
+					<img
+						src="public\img\map_topRight.png"
+						alt="Top Right Map"
+					/>
+					<button class="arrow-btn btn-left" onclick="moveMap('tl')">
+						<img src="public\img\left-vector.png" alt="left" />
+					</button>
+					<button class="arrow-btn btn-down" onclick="moveMap('br')">
+						<img src="public\img\down-vector.png" alt="down" />
+					</button>
+				</div>
+			</div>
+			<div class="map-section map-bl">
+				<div class="map-inner">
+					<img
+						src="public\img\map_bottomLeft.png"
+						alt="Bottom Left Map"
+					/>
+					<button class="arrow-btn btn-right" onclick="moveMap('br')">
+						<img src="public\img\right-vector.png" alt="right" />
+					</button>
+					<button class="arrow-btn btn-top" onclick="moveMap('tl')">
+						<img src="public\img\up-vector.png" alt="up" />
+					</button>
+				</div>
+			</div>
+			<div class="map-section map-br">
+				<div class="map-inner">
+					<img
+						src="public\img\map_bottomRight.png"
+						alt="Bottom Right Map"
+					/>
+					<button class="arrow-btn btn-left" onclick="moveMap('bl')">
+						<img src="public\img\left-vector.png" alt="left" />
+					</button>
+					<button class="arrow-btn btn-top" onclick="moveMap('tr')">
+						<img src="public\img\up-vector.png" alt="up" />
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			window.onload = function () {
+        console.log('window loaded');
+				const mapTL = document.querySelector('.map-tl');
+				mapTL.style.transform = 'translate(0px, 0px)';
+				window.addEventListener('keydown', handleKeyPress);
+      };
+
+			const handleKeyPress = (event) => {
+				const mapTL = document.querySelector('.map-tl');
+				switch (event.key) {
+					case 'ArrowUp':
+						if (mapTL.style.transform === 'translate(0px, -60vh)') {
+							moveMap('tl');
+						} else if (
+							mapTL.style.transform === 'translate(-120vh, -60vh)'
+						) {
+							moveMap('tr');
+						}
+						break;
+					case 'ArrowDown':
+						if (mapTL.style.transform === 'translate(0px, 0px)') {
+							moveMap('bl');
+						} else if (
+							mapTL.style.transform === 'translate(-120vh, 0px)'
+						) {
+							moveMap('br');
+						}
+						break;
+					case 'ArrowLeft':
+						if (mapTL.style.transform === 'translate(-120vh, 0px)') {
+							moveMap('tl');
+						} else if (
+							mapTL.style.transform === 'translate(-120vh, -60vh)'
+						) {
+							moveMap('bl');
+						}
+						break;
+					case 'ArrowRight':
+						if (mapTL.style.transform === 'translate(0px, 0px)') {
+							moveMap('tr');
+						} else if (
+							mapTL.style.transform === 'translate(0px, -60vh)'
+						) {
+							moveMap('br');
+						}
+						break;
+					default:
+						break;
+				}
+			};
+
+			const moveMap = (goto) => {
+				const mapTL = document.querySelector('.map-tl');
+				const mapTR = document.querySelector('.map-tr');
+				const mapBL = document.querySelector('.map-bl');
+				const mapBR = document.querySelector('.map-br');
+				switch (goto) {
+					case 'tr':
+						mapTL.style.transform = 'translate(-120vh, 0)';
+						mapTR.style.transform = 'translate(0, 0)';
+						mapBL.style.transform = 'translate(-120vh, 60vh)';
+						mapBR.style.transform = 'translate(0, 60vh)';
+						break;
+					case 'bl':
+						mapTL.style.transform = 'translate(0, -60vh)';
+						mapTR.style.transform = 'translate(120vh, -60vh)';
+						mapBL.style.transform = 'translate(0, 0)';
+						mapBR.style.transform = 'translate(120vh, 0)';
+						break;
+					case 'tl':
+						mapTL.style.transform = 'translate(0, 0)';
+						mapTR.style.transform = 'translate(120vh, 0)';
+						mapBL.style.transform = 'translate(0, 60vh)';
+						mapBR.style.transform = 'translate(120vh, 60vh)';
+						break;
+					case 'br':
+						mapTL.style.transform = 'translate(-120vh, -60vh)';
+						mapTR.style.transform = 'translate(0, -60vh)';
+						mapBL.style.transform = 'translate(-120vh, 0)';
+						mapBR.style.transform = 'translate(0, 0)';
+						break;
+					default:
+						break;
+				}
+			};
+		</script>
+	</body>
+</html>

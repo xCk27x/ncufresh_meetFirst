@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Achievement</title>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+			}
+
+      .nav {
+				position: fixed;
+				width: 100vw;
+				height: 13vh;
+				background-color: rgb(0, 183, 255);
+				z-index: 2;
+				display: flex;
+				box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+				justify-content: space-between;
+				align-items: center;
+			}
+
+      .title {
+				font-size: 2rem;
+				color: white;
+				font-weight: bold;
+				margin-left: 5vw;
+			}
+
+			.btn-achieve {
+				margin-right: 5vw;
+				cursor: pointer;
+				text-decoration: none;
+			}
+
+			a {
+				text-decoration: none;
+				color: black;
+			}
+
+      .achi-container {
+        position: absolute;
+        top: 13vh;
+        left: 0;
+        width: 100vw;
+        height: 87vh;
+        background-color: rgb(157, 220, 245);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .achi-box {
+        width: 35vw;
+        height: 30vh;
+        background-color: white;
+        border-radius: 1vw;
+        box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+      }
+		</style>
+	</head>
+	<body>
+		<div class="nav">
+			<p class="title">哈哈~ 感受痛苦吧！</p>
+			<button class="btn-achieve">
+				<a href="index.html"> 地圖頁面 </a>
+			</button>
+		</div>
+    <div class="achi-container">
+      <div class="achi-box">
+        <p>成就1</p>
+      </div>
+      <div class="achi-box">
+        <p>成就2</p>
+      </div>
+      <div class="achi-box">
+        <p>成就3</p>
+      </div>
+      <div class="achi-box">
+        <p>成就4</p>
+      </div>
+    </div>
+	</body>
+</html>

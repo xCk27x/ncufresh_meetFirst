@@ -17,7 +17,7 @@
 				position: fixed;
 				width: 100vw;
 				height: 13vh;
-				background-color: rgb(0, 183, 255);
+				background-color: #9BB8CD;
 				z-index: 2;
 				display: flex;
 				box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
@@ -25,7 +25,7 @@
 				align-items: center;
 			}
 
-      .title {
+      		.title {
 				font-size: 2rem;
 				color: white;
 				font-weight: bold;
@@ -33,9 +33,21 @@
 			}
 
 			.btn-achieve {
+				font-weight: bold;
 				margin-right: 5vw;
 				cursor: pointer;
 				text-decoration: none;
+				color: rgb(156, 120, 76);
+				background-color: #f1b84d;
+				padding: 10px;
+				border-radius: 10px;
+				border: rgb(156, 120, 76) solid 2px;
+				transition: all 0.3s ease-in-out;
+			}
+			.btn-achieve:hover {
+				background-color: rgb(156, 120, 76);
+				color: #ffffff;
+				transform: scale(1.1);
 			}
 
 			a {
@@ -49,7 +61,7 @@
         left: 0;
         width: 100vw;
         height: 87vh;
-        background-color: rgb(157, 220, 245);
+        background-color: #d0d4d7;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -72,9 +84,9 @@
 	<body>
 		<div class="nav">
 			<p class="title">哈哈~ 感受痛苦吧！</p>
-			<button class="btn-achieve">
-				<a href="index.html"> 地圖頁面 </a>
-			</button>
+				<a href="index.html" class="btn-achieve"> 
+					地圖頁面 
+				</a>
 		</div>
     <div class="achi-container">
       <div class="achi-box">

@@ -13,11 +13,11 @@
 				overflow: hidden;
 			}
 
-      .nav {
+			.nav {
 				position: fixed;
 				width: 100vw;
 				height: 13vh;
-				background-color: #9BB8CD;
+				background-color: #9bb8cd;
 				z-index: 2;
 				display: flex;
 				box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
@@ -25,7 +25,7 @@
 				align-items: center;
 			}
 
-      		.title {
+			.title {
 				font-size: 2rem;
 				color: white;
 				font-weight: bold;
@@ -55,52 +55,109 @@
 				color: black;
 			}
 
-      .achi-container {
-        position: absolute;
-        top: 13vh;
-        left: 0;
-        width: 100vw;
-        height: 87vh;
-        background-color: #d0d4d7;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        flex-wrap: wrap;
-      }
+			.achi-container {
+				position: absolute;
+				top: 13vh;
+				left: 0;
+				width: 100vw;
+				height: 87vh;
+				background-color: #d0d4d7;
+				display: flex;
+				justify-content: space-around;
+				align-items: center;
+				flex-wrap: wrap;
+			}
 
-      .achi-box {
-        width: 35vw;
-        height: 30vh;
-        background-color: white;
-        border-radius: 1vw;
-        box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-      }
+			.achi-box {
+				width: 35vw;
+				height: 30vh;
+				background-color: white;
+				border-radius: 1vw;
+				box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+				display: flex;
+				flex-direction: column;
+				justify-content: space-around;
+				align-items: center;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="nav">
 			<p class="title">哈哈~ 感受痛苦吧！</p>
-				<a href="index.html" class="btn-achieve"> 
-					地圖頁面 
-				</a>
+			<a href="index.html" class="btn-achieve"> 地圖頁面 </a>
 		</div>
-    <div class="achi-container">
-      <div class="achi-box">
-        <p>成就1</p>
-      </div>
-      <div class="achi-box">
-        <p>成就2</p>
-      </div>
-      <div class="achi-box">
-        <p>成就3</p>
-      </div>
-      <div class="achi-box">
-        <p>成就4</p>
-      </div>
-    </div>
+		<div class="achi-container">
+			<div class="achi-box">
+				<p>成就1</p>
+				<p id="achi1">已達成: 0 / 0</p>
+			</div>
+			<div class="achi-box">
+				<p>成就2</p>
+				<p id="achi2">已達成: 0 / 0</p>
+			</div>
+			<div class="achi-box">
+				<p>成就3</p>
+				<p id="achi3">已達成: 0 / 0</p>
+			</div>
+			<div class="achi-box">
+				<p>成就4</p>
+				<p id="achi4">已達成: 0 / 0</p>
+			</div>
+		</div>
+		<script>
+			var achiDictionary = {
+				achi1: {
+					name: '成就1',
+					description: '成就1的描述',
+					condition: '成就1的條件',
+					achieved: 0,
+				},
+				achi2: {
+					name: '成就2',
+					description: '成就2的描述',
+					condition: '成就2的條件',
+					achieved: 0,
+				},
+				achi3: {
+					name: '成就3',
+					description: '成就3的描述',
+					condition: '成就3的條件',
+					achieved: 0,
+				},
+				achi4: {
+					name: '成就4',
+					description: '成就4的描述',
+					condition: '成就4的條件',
+					achieved: 0,
+				},
+			};
+
+			achi1Text = document.getElementById('achi1');
+			achi2Text = document.getElementById('achi2');
+			achi3Text = document.getElementById('achi3');
+			achi4Text = document.getElementById('achi4');
+
+			fetch('http://localhost:3000/achievement')
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					achiDictionary.achi1.achieved = data.achi1;
+					achiDictionary.achi2.achieved = data.achi2;
+					achiDictionary.achi3.achieved = data.achi3;
+					achiDictionary.achi4.achieved = data.achi4;
+
+					achi1Text.innerHTML =
+						'已達成: ' + achiDictionary.achi1.achieved + ' / 1';
+					achi2Text.innerHTML =
+						'已達成: ' + achiDictionary.achi2.achieved + ' / 1';
+					achi3Text.innerHTML =
+						'已達成: ' + achiDictionary.achi3.achieved + ' / 1';
+					achi4Text.innerHTML =
+						'已達成: ' + achiDictionary.achi4.achieved + ' / 1';
+					console.log(achiDictionary);
+					console.log(data);
+				});
+		</script>
 	</body>
 </html>

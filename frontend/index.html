@@ -1,357 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<title>Interactive Map</title>
-		<style>
-			body {
-				margin: 0;
-				overflow: hidden;
-			}
 
-			.nav {
-				position: fixed;
-				width: 100vw;
-				height: 13vh;
-				background-color: #9bb8cd;
-				z-index: 2;
-				display: flex;
-				box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
-				justify-content: space-between;
-				align-items: center;
-			}
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Interactive Map</title>
+	<style>
+		audio {
+			display: block;
+		}
 
-			.title {
-				font-size: 2rem;
-				color: white;
-				font-weight: bold;
-				margin-left: 5vw;
-			}
+		body {
+			margin: 0;
+			overflow: hidden;
+			font-family: fonttt;
+		}
 
-			.btn-achieve {
-				font-weight: bold;
-				margin-right: 5vw;
-				cursor: pointer;
-				text-decoration: none;
-				color: rgb(156, 120, 76);
-				background-color: #f1b84d;
-				padding: 10px;
-				border-radius: 10px;
-				border: rgb(156, 120, 76) solid 2px;
-				transition: all 0.3s ease-in-out;
-			}
-			.btn-achieve:hover {
-				background-color: rgb(156, 120, 76);
-				color: #ffffff;
-				transform: scale(1.1);
-			}
+		@font-face {
+			font-family: 'fonttt';
+			src: url('public/font/cubic.woff') format("woff"),
+				url('public/font/cubic.ttf') format("truetype"),
+				url('public/font/cubic.woff2') format("woff2");
 
-			a {
-				text-decoration: none;
-				color: black;
-			}
+		}
 
-			.shield-top {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: 100vw;
-				height: 25vh;
-				z-index: 1;
-				background-color: #d0d4d7;
-			}
+		#notification {
+			opacity: 0;
+			padding: 10px;
+			border: 1px solid #ccc;
+			position: absolute;
+			top: 10px;
+			left: 10vh;
+			border-radius: 20px;
+			background-color: #fff;
+			transition: all 0.3s cubic-bezier(0.44, -0.25, 0.7, 1.4);
+			transform-origin: top left;
+			transform: scale(0);
+			z-index: 2;
+		}
 
-			.shield-left {
-				position: fixed;
-				top: 0;
-				right: 0;
-				width: calc(50vw - 60vh);
-				height: 100vh;
-				z-index: 1;
-				background-color: #d0d4d7;
-			}
+		.nav {
+			position: fixed;
+			width: 100vw;
+			height: 13vh;
+			background-color: #9bb8cd;
+			z-index: 2;
+			display: flex;
+			box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+			justify-content: space-between;
+			align-items: center;
+		}
 
-			.shield-right {
-				position: fixed;
-				top: 0;
-				left: 0;
-				width: calc(50vw - 60vh);
-				height: 100vh;
-				z-index: 1;
-				background-color: #d0d4d7;
-			}
+		.title {
+			font-size: 2rem;
+			color: white;
+			margin-left: 5vw;
+		}
 
-			.shield-bottom {
-				position: fixed;
-				bottom: 0;
-				left: 0;
-				width: 100vw;
-				height: 15vh;
-				z-index: 1;
-				background-color: #d0d4d7;
-			}
+		.btn-achieve {
+			font-weight: bold;
+			margin-right: 5vw;
+			cursor: pointer;
+			text-decoration: none;
+			color: rgb(156, 120, 76);
+			background-color: #f1b84d;
+			padding: 10px;
+			border-radius: 10px;
+			border: rgb(156, 120, 76) solid 2px;
+			transition: all 0.3s ease-in-out;
+		}
 
-			.map-container {
-				width: 120vh;
-				height: 60vh;
-				position: fixed;
-				top: 25vh;
-				left: calc(50vw - 60vh);
-			}
+		.btn-achieve:hover {
+			background-color: rgb(156, 120, 76);
+			color: #ffffff;
+			transform: scale(1.1);
+		}
 
-			.map-section {
-				width: 120vh;
-				height: 60vh;
-				overflow: hidden;
-				position: absolute;
-				transition: all 0.5s ease-in-out;
-			}
+		a {
+			text-decoration: none;
+			color: black;
+		}
 
-			.map-inner {
-				width: 100%;
-				height: 100%;
-				position: relative;
-			}
+		.shield-top {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 25vh;
+			z-index: 1;
+			background-color: #d0d4d7;
+		}
 
-			.arrow-btn {
-				padding: 0;
-				margin: 0;
-				border: none;
-				background-color: rgba(0, 0, 0, 0);
-			}
+		.shield-left {
+			position: fixed;
+			top: 0;
+			right: 0;
+			width: calc(50vw - 60vh);
+			height: 100vh;
+			z-index: 1;
+			background-color: #d0d4d7;
+		}
 
-			.btn-top {
-				position: absolute;
-				padding: 0;
-				margin: 0;
-				border: none;
-				top: 3%;
-				bottom: 83%;
-				left: 50%;
-				display: flex;
-				transform: translate(-50%, 0);
-				background-color: #f1b84d;
-			}
+		.shield-right {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: calc(50vw - 60vh);
+			height: 100vh;
+			z-index: 1;
+			background-color: #d0d4d7;
+		}
 
-			.btn-left {
-				position: absolute;
-				padding: 0;
-				margin: 0;
-				border: none;
-				top: 50%;
-				right: 90%;
-				left: 3%;
-				display: flex;
-				transform: translate(0, -50%);
-				background-color: #f1b84d;
-			}
+		.shield-bottom {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100vw;
+			height: 15vh;
+			z-index: 1;
+			background-color: #d0d4d7;
+		}
 
-			.btn-right {
-				position: absolute;
-				top: 50%;
-				right: 3%;
-				left: 90%;
-				display: flex;
-				transform: translate(0, -50%);
-				background-color: #f1b84d;
-			}
+		.map-container {
+			width: 120vh;
+			height: 60vh;
+			position: fixed;
+			top: 25vh;
+			left: calc(50vw - 60vh);
+		}
 
-			.btn-down {
-				position: absolute;
-				width: -moz-fit-content;
-				width: fit-content;
-				top: 83%;
-				bottom: 3%;
-				left: 50%;
-				display: flex;
-				transform: translate(-50%, 0);
-				background-color: #f1b84d;
-			}
+		.map-section {
+			width: 120vh;
+			height: 60vh;
+			overflow: hidden;
+			position: absolute;
+			transition: all 0.5s ease-in-out;
+		}
 
-			.map-tl {
-				transform: translate(0, 0);
-			}
-			.map-tr {
-				transform: translate(120vh, 0);
-			}
-			.map-bl {
-				transform: translate(0, 60vh);
-			}
-			.map-br {
-				transform: translate(120vh, 60vh);
-			}
+		.map-inner {
+			width: 100%;
+			height: 100%;
+			position: relative;
+		}
 
-			img {
-				width: 100%;
-				height: 100%;
-			}
+		.charac {
+			width: 10vh;
+			height: 10vh;
+			position: absolute;
+			left: 0;
+		}
 
-			.top-left {
-				top: 10px;
-				left: 10px;
-			}
+		.arrow-btn {
+			padding: 0;
+			margin: 0;
+			border: none;
+			background-color: rgba(0, 0, 0, 0);
+		}
 
-			.top-right {
-				top: 10px;
-				right: 100px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="nav">
-			<p class="title">哈哈~ 感受痛苦吧！</p>
-			<a href="achievement.html" class="btn-achieve"> 成就頁面 </a>
-		</div>
-		<div class="shield-top"></div>
-		<div class="shield-left"></div>
-		<div class="shield-right"></div>
-		<div class="shield-bottom"></div>
-		<div class="map-container">
-			<div class="map-section map-tl">
-				<div class="map-inner">
-					<img src="public\img\map_topLeft.png" alt="Top Left Map" />
-					<button class="arrow-btn btn-right" onclick="moveMap('tr')">
-						<img src="public\img\right-vector.png" alt="right" />
-					</button>
-					<button class="arrow-btn btn-down" onclick="moveMap('bl')">
-						<img src="public\img\down-vector.png" alt="down" />
-					</button>
-				</div>
-			</div>
-			<div class="map-section map-tr">
-				<div class="map-inner">
-					<img
-						src="public\img\map_topRight.png"
-						alt="Top Right Map"
-					/>
-					<button class="arrow-btn btn-left" onclick="moveMap('tl')">
-						<img src="public\img\left-vector.png" alt="left" />
-					</button>
-					<button class="arrow-btn btn-down" onclick="moveMap('br')">
-						<img src="public\img\down-vector.png" alt="down" />
-					</button>
-				</div>
-			</div>
-			<div class="map-section map-bl">
-				<div class="map-inner">
-					<img
-						src="public\img\map_bottomLeft.png"
-						alt="Bottom Left Map"
-					/>
-					<button class="arrow-btn btn-right" onclick="moveMap('br')">
-						<img src="public\img\right-vector.png" alt="right" />
-					</button>
-					<button class="arrow-btn btn-top" onclick="moveMap('tl')">
-						<img src="public\img\up-vector.png" alt="up" />
-					</button>
-				</div>
-			</div>
-			<div class="map-section map-br">
-				<div class="map-inner">
-					<img
-						src="public\img\map_bottomRight.png"
-						alt="Bottom Right Map"
-					/>
-					<button class="arrow-btn btn-left" onclick="moveMap('bl')">
-						<img src="public\img\left-vector.png" alt="left" />
-					</button>
-					<button class="arrow-btn btn-top" onclick="moveMap('tr')">
-						<img src="public\img\up-vector.png" alt="up" />
-					</button>
-				</div>
+		.btn-top {
+			position: absolute;
+			padding: 0;
+			margin: 0;
+			border: none;
+			top: 3%;
+			bottom: 83%;
+			left: 50%;
+			display: flex;
+			transform: translate(-50%, 0);
+			background-color: #f1b84d;
+		}
+
+		.btn-left {
+			position: absolute;
+			padding: 0;
+			margin: 0;
+			border: none;
+			top: 50%;
+			right: 90%;
+			left: 3%;
+			display: flex;
+			transform: translate(0, -50%);
+			background-color: #f1b84d;
+		}
+
+		.btn-right {
+			position: absolute;
+			top: 50%;
+			right: 3%;
+			left: 90%;
+			display: flex;
+			transform: translate(0, -50%);
+			background-color: #f1b84d;
+		}
+
+		.btn-down {
+			position: absolute;
+			width: -moz-fit-content;
+			width: fit-content;
+			top: 83%;
+			bottom: 3%;
+			left: 50%;
+			display: flex;
+			transform: translate(-50%, 0);
+			background-color: #f1b84d;
+		}
+
+		.map-tl {
+			transform: translate(0, 0);
+		}
+
+		.map-tr {
+			transform: translate(120vh, 0);
+		}
+
+		.map-bl {
+			transform: translate(0, 60vh);
+		}
+
+		.map-br {
+			transform: translate(120vh, 60vh);
+		}
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+
+		.top-left {
+			top: 10px;
+			left: 10px;
+		}
+
+		.top-right {
+			top: 10px;
+			right: 100px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="nav">
+		<p class="title">哈哈~ 感受痛苦吧！</p>
+		<a href="achievement.html" class="btn-achieve"> 成就頁面 </a>
+	</div>
+	<div class="shield-top"></div>
+	<div class="shield-left"></div>
+	<div class="shield-right"></div>
+	<div class="shield-bottom"></div>
+	<div class="map-container">
+		<div class="map-section map-tl">
+			<div class="map-inner">
+				<img src="public\img\map_topLeft.png" alt="Top Left Map" />
+				<img src="public\img\hedgehog.png" alt="Click to play audio" id="playButton" class="charac">
+
+				<div id="notification">音檔播放中--</div>
+				<audio id="audioPlayer" src="public\audio\voice.mp3"></audio>
+				<button class="arrow-btn btn-right" onclick="moveMap('tr')">
+					<img src="public\img\right-vector.png" alt="right" />
+				</button>
+				<button class="arrow-btn btn-down" onclick="moveMap('bl')">
+					<img src="public\img\down-vector.png" alt="down" />
+				</button>
 			</div>
 		</div>
+		<div class="map-section map-tr">
+			<div class="map-inner">
+				<img src="public\img\map_topRight.png" alt="Top Right Map" />
+				<button class="arrow-btn btn-left" onclick="moveMap('tl')">
+					<img src="public\img\left-vector.png" alt="left" />
+				</button>
+				<button class="arrow-btn btn-down" onclick="moveMap('br')">
+					<img src="public\img\down-vector.png" alt="down" />
+				</button>
+			</div>
+		</div>
+		<div class="map-section map-bl">
+			<div class="map-inner">
+				<img src="public\img\map_bottomLeft.png" alt="Bottom Left Map" />
+				<button class="arrow-btn btn-right" onclick="moveMap('br')">
+					<img src="public\img\right-vector.png" alt="right" />
+				</button>
+				<button class="arrow-btn btn-top" onclick="moveMap('tl')">
+					<img src="public\img\up-vector.png" alt="up" />
+				</button>
+			</div>
+		</div>
+		<div class="map-section map-br">
+			<div class="map-inner">
+				<img src="public\img\map_bottomRight.png" alt="Bottom Right Map" />
+				<button class="arrow-btn btn-left" onclick="moveMap('bl')">
+					<img src="public\img\left-vector.png" alt="left" />
+				</button>
+				<button class="arrow-btn btn-top" onclick="moveMap('tr')">
+					<img src="public\img\up-vector.png" alt="up" />
+				</button>
+			</div>
+		</div>
+	</div>
 
-		<script>
-			window.onload = function () {
-				console.log('window loaded');
-				const mapTL = document.querySelector('.map-tl');
-				mapTL.style.transform = 'translate(0px, 0px)';
-				window.addEventListener('keydown', handleKeyPress);
-			};
+	<script>
+		window.onload = function () {
+			console.log('window loaded');
+			const mapTL = document.querySelector('.map-tl');
+			mapTL.style.transform = 'translate(0px, 0px)';
+			window.addEventListener('keydown', handleKeyPress);
+		};
 
-			const handleKeyPress = (event) => {
-				const mapTL = document.querySelector('.map-tl');
-				switch (event.key) {
-					case 'ArrowUp':
-						if (mapTL.style.transform === 'translate(0px, -60vh)') {
-							moveMap('tl');
-						} else if (
-							mapTL.style.transform === 'translate(-120vh, -60vh)'
-						) {
-							moveMap('tr');
-						}
-						break;
-					case 'ArrowDown':
-						if (mapTL.style.transform === 'translate(0px, 0px)') {
-							moveMap('bl');
-						} else if (
-							mapTL.style.transform === 'translate(-120vh, 0px)'
-						) {
-							moveMap('br');
-						}
-						break;
-					case 'ArrowLeft':
-						if (mapTL.style.transform === 'translate(-120vh, 0px)') {
-							moveMap('tl');
-						} else if (
-							mapTL.style.transform === 'translate(-120vh, -60vh)'
-						) {
-							moveMap('bl');
-						}
-						break;
-					case 'ArrowRight':
-						if (mapTL.style.transform === 'translate(0px, 0px)') {
-							moveMap('tr');
-						} else if (
-							mapTL.style.transform === 'translate(0px, -60vh)'
-						) {
-							moveMap('br');
-						}
-						break;
-					default:
-						break;
-				}
-			};
+		const handleKeyPress = (event) => {
+			const mapTL = document.querySelector('.map-tl');
+			switch (event.key) {
+				case 'ArrowUp':
+					if (mapTL.style.transform === 'translate(0px, -60vh)') {
+						moveMap('tl');
+					} else if (
+						mapTL.style.transform === 'translate(-120vh, -60vh)'
+					) {
+						moveMap('tr');
+					}
+					break;
+				case 'ArrowDown':
+					if (mapTL.style.transform === 'translate(0px, 0px)') {
+						moveMap('bl');
+					} else if (
+						mapTL.style.transform === 'translate(-120vh, 0px)'
+					) {
+						moveMap('br');
+					}
+					break;
+				case 'ArrowLeft':
+					if (mapTL.style.transform === 'translate(-120vh, 0px)') {
+						moveMap('tl');
+					} else if (
+						mapTL.style.transform === 'translate(-120vh, -60vh)'
+					) {
+						moveMap('bl');
+					}
+					break;
+				case 'ArrowRight':
+					if (mapTL.style.transform === 'translate(0px, 0px)') {
+						moveMap('tr');
+					} else if (
+						mapTL.style.transform === 'translate(0px, -60vh)'
+					) {
+						moveMap('br');
+					}
+					break;
+				default:
+					break;
+			}
+		};
+		document.getElementById('playButton').addEventListener('click', function () {
+			var audio = document.getElementById('audioPlayer');
+			var notification = document.getElementById('notification');
+			if (audio.paused) {
+				audio.play();
 
-			const moveMap = (goto) => {
-				const mapTL = document.querySelector('.map-tl');
-				const mapTR = document.querySelector('.map-tr');
-				const mapBL = document.querySelector('.map-bl');
-				const mapBR = document.querySelector('.map-br');
-				switch (goto) {
-					case 'tr':
-						mapTL.style.transform = 'translate(-120vh, 0)';
-						mapTR.style.transform = 'translate(0, 0)';
-						mapBL.style.transform = 'translate(-120vh, 60vh)';
-						mapBR.style.transform = 'translate(0, 60vh)';
-						break;
-					case 'bl':
-						mapTL.style.transform = 'translate(0, -60vh)';
-						mapTR.style.transform = 'translate(120vh, -60vh)';
-						mapBL.style.transform = 'translate(0, 0)';
-						mapBR.style.transform = 'translate(120vh, 0)';
-						break;
-					case 'tl':
-						mapTL.style.transform = 'translate(0, 0)';
-						mapTR.style.transform = 'translate(120vh, 0)';
-						mapBL.style.transform = 'translate(0, 60vh)';
-						mapBR.style.transform = 'translate(120vh, 60vh)';
-						break;
-					case 'br':
-						mapTL.style.transform = 'translate(-120vh, -60vh)';
-						mapTR.style.transform = 'translate(0, -60vh)';
-						mapBL.style.transform = 'translate(-120vh, 0)';
-						mapBR.style.transform = 'translate(0, 0)';
-						break;
-					default:
-						break;
-				}
-			};
-		</script>
-	</body>
+				notification.style.transform = 'scale(1)';
+				notification.style.opacity = 1;
+			} else {
+				audio.pause();
+				notification.style.opacity = 0;
+				notification.style.transform = 'scale(0)';
+			}
+		});
+
+
+
+		const moveMap = (goto) => {
+			const mapTL = document.querySelector('.map-tl');
+			const mapTR = document.querySelector('.map-tr');
+			const mapBL = document.querySelector('.map-bl');
+			const mapBR = document.querySelector('.map-br');
+			switch (goto) {
+				case 'tr':
+					mapTL.style.transform = 'translate(-120vh, 0)';
+					mapTR.style.transform = 'translate(0, 0)';
+					mapBL.style.transform = 'translate(-120vh, 60vh)';
+					mapBR.style.transform = 'translate(0, 60vh)';
+					break;
+				case 'bl':
+					mapTL.style.transform = 'translate(0, -60vh)';
+					mapTR.style.transform = 'translate(120vh, -60vh)';
+					mapBL.style.transform = 'translate(0, 0)';
+					mapBR.style.transform = 'translate(120vh, 0)';
+					break;
+				case 'tl':
+					mapTL.style.transform = 'translate(0, 0)';
+					mapTR.style.transform = 'translate(120vh, 0)';
+					mapBL.style.transform = 'translate(0, 60vh)';
+					mapBR.style.transform = 'translate(120vh, 60vh)';
+					break;
+				case 'br':
+					mapTL.style.transform = 'translate(-120vh, -60vh)';
+					mapTR.style.transform = 'translate(0, -60vh)';
+					mapBL.style.transform = 'translate(-120vh, 0)';
+					mapBR.style.transform = 'translate(0, 0)';
+					break;
+				default:
+					break;
+			}
+		};
+	</script>
+</body>
+
 </html>

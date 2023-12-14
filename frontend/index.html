@@ -46,7 +46,7 @@
 			background-color: #9bb8cd;
 			z-index: 2;
 			display: flex;
-			box-shadow: 0 0.6rem 1rem rgba(0, 0, 0, 0.2);
+			box-shadow: 0 0.6rem 1rem rgb(104 105 109 / 20%);
 			justify-content: space-between;
 			align-items: center;
 		}
@@ -55,25 +55,6 @@
 			font-size: 2rem;
 			color: white;
 			margin-left: 5vw;
-		}
-
-		.btn-achieve {
-			font-weight: bold;
-			margin-right: 5vw;
-			cursor: pointer;
-			text-decoration: none;
-			color: rgb(156, 120, 76);
-			background-color: #f1b84d;
-			padding: 10px;
-			border-radius: 10px;
-			border: rgb(156, 120, 76) solid 2px;
-			transition: all 0.3s ease-in-out;
-		}
-
-		.btn-achieve:hover {
-			background-color: rgb(156, 120, 76);
-			color: #ffffff;
-			transform: scale(1.1);
 		}
 
 		a {
@@ -240,8 +221,7 @@
 
 <body>
 	<div class="nav">
-		<p class="title">哈哈~ 感受痛苦吧！</p>
-		<a href="achievement.html" class="btn-achieve"> 成就頁面 </a>
+		<p class="title">新知網相見歡活動</p>
 	</div>
 	<div class="shield-top"></div>
 	<div class="shield-left"></div>
@@ -354,7 +334,6 @@
 			var notification = document.getElementById('notification');
 			if (audio.paused) {
 				audio.play();
-
 				notification.style.transform = 'scale(1)';
 				notification.style.opacity = 1;
 			} else {
